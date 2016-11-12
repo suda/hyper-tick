@@ -18,17 +18,18 @@ services:
   influxdb:
     image: influxdb:1.1.0-rc2-alpine
     volumes:
-      - /var/lib/influxdb
-    size: S2
+      - influxdb-data:/var/lib/influxdb
+    size: S3
     restart: always
     environment:
       - VIRTUAL_HOST=influxdb.${ROOT_DOMAIN}
+      - EXCLUDE_PORTS=8083
 
   # Define a Chronograf service
   chronograf:
     image: chronograf:1.0.0-rc1
     volumes:
-      - /var/lib/chronograf
+      - chronograf-data:/var/lib/chronograf
     links:
       - influxdb
     size: S1
@@ -44,7 +45,7 @@ services:
       - KAPACITOR_HOSTNAME=kapacitor
       - KAPACITOR_INFLUXDB_0_URLS_0=http://influxdb:8086
     volumes:
-      - /var/lib/kapacitor
+      - kapacitor-data:/var/lib/kapacitor
     size: S1
     restart: always
     links:
