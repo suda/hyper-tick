@@ -33,3 +33,11 @@ Now your services should be available under following subdomains (replace `examp
 Chronograf is the only one that has graphical HTTP interface but you can use [CLI for InfluxDB and Kapacitor](https://www.influxdata.com/downloads/) just remember to pass username and password.
 
 **Warning:** this stack uses `HTTP_BASIC_AUTH` variable of [`dockercloud-haproxy` image](https://github.com/docker/dockercloud-haproxy#global-and-default-settings-of-haproxy) which isn't recommended for production.
+
+You can read more about [rationale of this on my blog](http://suda.pl/cheapest-6-86-hosted-influxdb-chronograf-and-kapacitor-with-hyper-sh/).
+
+# [Contributions welcome](http://contributionswelcome.org/)
+
+All contributions (no matter if small) are always welcome.
+
+Feel free to create [file issues](https://github.com/suda/hyper-tick/issues) or fork this repo and add improvements!
