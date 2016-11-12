@@ -1,0 +1,54 @@
+version: "2"
+
+services:
+  haproxy:
+    image: "dockercloud/haproxy:latest"
+    links:
+      - influxdb
+      - chronograf
+      - kapacitor
+    ports:
+      - "80:80"
+    size: S2
+    fip: ${FIP}
+    environment:
+      - HTTP_BASIC_AUTH=${USERNAME}:${PASSWORD}
+
+  # Define an InfluxDB service
+  influxdb:
+    image: influxdb:1.1.0-rc2-alpine
+    volumes:
+      - /var/lib/influxdb
+    size: S2
+    restart: always
+    environment:
+      - VIRTUAL_HOST=influxdb.${ROOT_DOMAIN}
+
+  # Define a Chronograf service
+  chronograf:
+    image: chronograf:1.0.0-rc1
+    volumes:
+      - /var/lib/chronograf
+    links:
+      - influxdb
+    size: S1
+    restart: always
+    environment:
+      - VIRTUAL_HOST=chronograf.${ROOT_DOMAIN}
+
+  # Define a Kapacitor service
+  kapacitor:
+    image: kapacitor:1.1-alpine
+    environment:
+      - VIRTUAL_HOST=kapacitor.${ROOT_DOMAIN}
+      - KAPACITOR_HOSTNAME=kapacitor
+      - KAPACITOR_INFLUXDB_0_URLS_0=http://influxdb:8086
+    volumes:
+      - /var/lib/kapacitor
+    size: S1
+    restart: always
+    links:
+      - influxdb
+    ports:
+      - "9092:9092"
+    hostname: kapacitor
